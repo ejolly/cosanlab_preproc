@@ -384,7 +384,7 @@ def builder(subject_id, subId, project_dir, data_dir, output_dir, output_final_d
     #####################
     if session:
         workflow = Workflow(name='ses-'+session)
-        workflow.base_dir = os.path.join(output_dir, subId)
+        workflow.base_dir = os.path.join(output_interm_dir, subId)
     else:
         workflow = Workflow(name=subId)
         workflow.base_dir = output_interm_dir
@@ -538,10 +538,12 @@ def builder(subject_id, subId, project_dir, data_dir, output_dir, output_final_d
         (realign_fsl, datasink, [('par_file', 'functional.@motionparams')])
     ])
 
-    if not os.path.exists(os.path.join(output_dir, 'pipeline.png')):
-        workflow.write_graph(dotfilename=os.path.join(output_dir, 'pipeline'), format='png')
-
-    print(f"Creating workflow for subject: {subject_id}")
+    # if not os.path.exists(os.path.join(output_dir, 'pipeline.png')):
+    #     workflow.write_graph(dotfilename=os.path.join(output_dir, 'pipeline'), format='png')
+    if session:
+        print(f"Creating workflow for subject: {subject_id} session: {session}")
+    else:
+        print(f"Creating workflow for subject: {subject_id}")
     if ants_threads == 8:
         print(f"ANTs will utilize the default of {ants_threads} threads for parallel processing.")
     else:
